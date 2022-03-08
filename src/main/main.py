@@ -31,6 +31,7 @@ def gen_save(num, sym, destination):
                 num4 = num4+1
             else:
                 num5 = num5+1
+            print(i+1, lvl)
     else:
         for i in range(num):
             # 22 to 32 knokn cells
@@ -52,10 +53,16 @@ def gen_save(num, sym, destination):
                 num4 = num4+1
             else:
                 num5 = num5+1
+            print(i+1, lvl)
     print(" ")
-    json_object = json.dumps(result, indent=4)
-    with open("sudoku.json", "w") as outfile:
-        outfile.write(json_object)
+
+    with open("sudoku.json", "r+") as outfile:
+        data = json.load(outfile)
+        for i in range(len(result)):
+            result[i]["id"] = data[-1]["id"]+1
+            data.append(result[i])
+        outfile.seek(0)
+        json.dump(data, outfile, indent = 4)
     print(num1, "very Easy, ", num2, "Easy, ", num3, "Medium, ",
           num4, "Hard & ", num5, "Very Hard boards generated.")
 
