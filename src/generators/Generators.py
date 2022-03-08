@@ -5,8 +5,35 @@ from src.utils import SolverUtils as SV
 from src.utils import GeneratorUtils as GU
 from src.checkers import SudoCheck as SC
 from src.solver import solver as SL
+from src.ratingSudos import rating as RT
 from random import randint
 
+def solve(A):
+    if (np.min(A)>=0 and np.max(A)<=9):
+        if (SC.IsSudoRight(A)):
+            printMes("Solver","Already Solved!")
+        else:
+            Adef=deepcopy(A)
+            if (GU.CountSolutions(Adef,[],0,1)==1):
+                A=SL.SudoSolveIt2(A,[],1)
+                return A
+            else:
+                printMes("Solver","There isn't unique solution!")
+    else:
+        printMes("Solver","Wrong inputs!")
+
+def GenerateString(lb,ub,sym):
+    A= GenerateProb(lb,ub,sym)
+    B= deepcopy(A)
+    B= solve(B)
+    lvl = RT.RateProb(A)
+    b= ""
+    s= ""
+    for i in A:
+        b += "".join(str(x) for x in i.tolist())
+    for i in B:
+        s += "".join(str(x) for x in i.tolist())
+    return [b.replace("0", "*"),s,lvl]
 
 def GenerateProb(lb,ub,sym):
     if sym>0:
